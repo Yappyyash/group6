@@ -35,18 +35,23 @@ To get started with the project:
 ### Page 1: Intro
 
 This is the introductory page of our website. It features a small motto that encapsulates the essence of our service.
+![Page-1](images/first.jpeg)
 
 ### Page 2: Authentication
 
 From the introduction page, you will be redirected to the authentication page. You need to log in to access the main functionality of the website.
+![Page-2](images/second.jpeg)
 
 ### Page 3: Main Page
+![Page-3](images/third.jpeg)
 
 On the main page, you will find:
 
 -   A **Start** button to begin tracking activity and taking screenshots.
 -   A **Get Data** button to retrieve the collected activity data.
 -   A **Stop** button to halt the tracking session.
+     
+![Page-3(1)](images/thirdd.jpeg)
 
 ## Technologies Used
 
