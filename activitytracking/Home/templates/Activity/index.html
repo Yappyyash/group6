@@ -1,4 +1,5 @@
-{%extends "Home/index.html"%} {%block start%}
+{% extends "Home/index.html" %}
+{% block start %}
 <div class="container">
   <div class="mt-5">
     <h1>Start Tracking Your Journey</h1>
@@ -9,18 +10,50 @@
       handled with the highest standards of privacy and security.
     </p>
     <button class="btn btn-primary" id="startButton">Start</button>
-    <button class="btn btn-danger" id="stopButton">Stop</button>
-    <button class="btn btn-success" id="refreshButton">Get Data</button>
+    <button class="btn btn-danger" id="stopButton" style="display: none;">Stop</button>
+    <button class="btn btn-success" id="refreshButton" style="display: none;">Get Data</button>
   </div>
   <div class="mt-5">
     <div id="applications">
-      <h2>User Activity</h2>
+      <h2 id="activityHeader" style="display: none;">User Activity</h2>
       <ul id="appList"></ul>
+    </div>
+    <div id="trackingMessage" style="display: none;" class="tracking-message">
+      <p>Tracking your activity...</p>
+      <div class="spinner"></div>
     </div>
   </div>
 </div>
+<style>
+  .tracking-message {
+    margin-top: 20px;
+    font-size: 1.2em;
+    color: #007bff;
+  }
+
+  .spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 4px solid #007bff;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin-top: 10px;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+</style>
 <script>
   const user_id = localStorage.getItem('user_id');
+
   document.getElementById('startButton').addEventListener('click', () => {
     fetch('/start_tracking/', {
       method: 'POST',
@@ -30,7 +63,14 @@
       body: JSON.stringify({ id: user_id })
     })
       .then(response => response.json())
-      .then(data => alert('Tracking started'))
+      .then(data => {
+        alert('Tracking started');
+        document.getElementById('startButton').style.display = 'none';
+        document.getElementById('stopButton').style.display = 'inline-block';
+        document.getElementById('refreshButton').style.display = 'inline-block';
+        document.getElementById('activityHeader').style.display = 'none'; // Hide the header initially
+        document.getElementById('trackingMessage').style.display = 'block'; // Show tracking message
+      })
       .catch(error => console.error('Error:', error));
   });
 
@@ -39,10 +79,18 @@
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      body: JSON.stringify({ id: user_id })
     })
       .then(response => response.json())
-      .then(data => alert('Tracking stopped'))
+      .then(data => {
+        alert('Tracking stopped');
+        document.getElementById('startButton').style.display = 'inline-block';
+        document.getElementById('stopButton').style.display = 'none';
+        document.getElementById('refreshButton').style.display = 'none';
+        document.getElementById('activityHeader').style.display = 'none'; // Hide the header
+        document.getElementById('trackingMessage').style.display = 'none'; // Hide tracking message
+      })
       .catch(error => console.error('Error:', error));
   });
 
@@ -57,8 +105,9 @@
           li.textContent = app;
           appList.appendChild(li);
         });
+        document.getElementById('activityHeader').style.display = 'block'; // Show the header
       })
       .catch(error => console.error('Error:', error));
   });
 </script>
-{%endblock%}
+{% endblock %}
