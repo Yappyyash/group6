@@ -13,11 +13,11 @@ To get started with the project:
     
 2.  **Navigate to the project directory**:
     
-    `cd activitytracking/` 
+        `cd activitytracking/` 
     
 3.  **Start the server**:
 
-    `python manage.py runserver` 
+        `python manage.py runserver` 
     
 5.  **Access the home route** at: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
     
