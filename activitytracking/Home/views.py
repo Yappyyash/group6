@@ -1,3 +1,9 @@
+import threading
+import time
+import json
+import win32gui
+import win32process
+import psutil
 from django.shortcuts import render
 from django.middleware.csrf import get_token
 from django.http import JsonResponse, HttpResponse
@@ -8,23 +14,17 @@ from rest_framework_simplejwt.tokens import AccessToken
 from .models import person_collection
 from .hashing import hash_password, check_password
 from .creatingToken import create_tokens
-import threading
-import time
-import win32gui
-import win32process
-import psutil
 from .image_utils import *
-import json
 from django.views.decorators.csrf import csrf_exempt
 
 # Shared state for tracking
-tracking = False
+tracking_event = threading.Event()
 tracked_applications = []
 screenshot_thread = None
+tracking_lock = threading.Lock()
 
 # HTML views
 def Home(request):
-   
     return render(request, "Home/index.html")
 
 def Dashboard(request):
@@ -37,8 +37,6 @@ def Signup(request):
     return render(request, "Auth/signup.html")
 
 def Front(request):
-    print("hiii")
-    print(request.session.get("username"))
     return render(request, "Front/index.html")
 
 def Activity(request):
@@ -46,6 +44,7 @@ def Activity(request):
 
 def show_imgpage(request):
     return render(request, "show_images/index.html")
+
 # DRF views for authentication
 @api_view(['POST'])
 def signup(request):
@@ -76,13 +75,11 @@ def signup(request):
     access_token, refresh_token = create_tokens(user)
     fetched_user_data = person_collection.find_one({'username': username})
 
-    request.session.username=username
-    print(request.session.get("username"))
     return Response({
         'username': username,
         'access_token': access_token,
         'refresh_token': refresh_token,
-        'user_id':str(fetched_user_data['_id'])
+        'user_id': str(fetched_user_data['_id'])
     }, status=status.HTTP_201_CREATED)
 
 @api_view(['POST'])
@@ -97,12 +94,11 @@ def login(request):
     if user and check_password(user['password'], password):
         access_token, refresh_token = create_tokens(user)
         request.session.access_token = str(access_token)
-        # print(user['_id'])
         return Response({
             'username': username,
             'access_token': access_token,
             'refresh_token': refresh_token,
-            'user_id':str(user['_id'])
+            'user_id': str(user['_id'])
         }, status=status.HTTP_200_OK)
     else:
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -122,7 +118,6 @@ def protected_route(request):
 
 @api_view(['POST'])
 def logout(request):
-    request.session.pop('access_token', None)
     return Response({"message": "Successfully logged out."}, status=status.HTTP_200_OK)
 
 # Activity Tracking
@@ -140,53 +135,58 @@ def get_active_process_name():
         return None
 
 def track_active_applications(user_id):
-    global tracking, tracked_applications, screenshot_thread
+    global tracked_applications, screenshot_thread
     tracked_applications = []
 
     # Start screenshot capture
     screenshot_thread = threading.Thread(target=capture_screenshot_interval, args=(user_id, 10))
     screenshot_thread.start()
 
-    while tracking:
+    while tracking_event.is_set():
         active_window_name = get_active_window_name()
-        if active_window_name and (not tracked_applications or active_window_name != tracked_applications[-1]):
-            tracked_applications.append(active_window_name)
+        with tracking_lock:
+            if active_window_name and (not tracked_applications or active_window_name != tracked_applications[-1]):
+                tracked_applications.append(active_window_name)
         time.sleep(3)
 
-    # Ensure screenshot capture stops when tracking stops
-    tracking = False
+    tracking_event.clear()
 
 @api_view(['POST'])
 def start_tracking(request):
-    global tracking
-    if not tracking:
-        tracking = True
-        user_id = request.data.get('id')  # Assuming the MongoDB _id is stored in the session or user object
+    if not tracking_event.is_set():
+        tracking_event.set()
+        user_id = request.data.get('id')
         thread = threading.Thread(target=track_active_applications, args=(user_id,))
         thread.start()
     return Response({'status': 'started'})
 
 @api_view(['POST'])
 def stop_tracking(request):
-    global tracking, screenshot_thread
-    tracking = False
+    tracking_event.clear()  # Signal the thread to stop
 
+    # Use a timeout to avoid blocking indefinitely if something goes wrong
     if screenshot_thread and screenshot_thread.is_alive():
-        screenshot_thread.join()  # Ensure the screenshot thread has stopped
-    
-    # Add data to the database if needed
+        screenshot_thread.join(timeout=2)
+
+    user_id = request.data.get('id')
+    person_collection.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$push": {"tracked_applications": tracked_applications}}
+        )
+     # Clear the tracked applications list
+    tracked_applications.clear()
+
     return Response({'status': 'stopped'})
+
 
 @api_view(['GET'])
 def get_applications(request):
     return Response({'applications': tracked_applications})
 
-
 @csrf_exempt
 def get_my_images(request):
     if request.method == 'POST':
         try:
-            # Parse JSON data from the request body
             request_data = json.loads(request.body)
             user_id = request_data.get('id')
 
@@ -196,7 +196,7 @@ def get_my_images(request):
             all_screenshots = get_all_screenshots(user_id)
             
             if isinstance(all_screenshots, HttpResponse):
-                return all_screenshots  # If an error response was returned, pass it along
+                return all_screenshots
 
             return JsonResponse({'screenshots': all_screenshots})
 
@@ -204,8 +204,6 @@ def get_my_images(request):
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
     return HttpResponse('Method Not Allowed', status=405)
-
-
 
 def test_csrf_view(request):
     token = get_token(request)
