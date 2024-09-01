@@ -19,3 +19,4 @@ typing_extensions==4.12.2
 xlib==0.21
 pywin32
 pillow
+matplotlib

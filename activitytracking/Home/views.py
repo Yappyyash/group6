@@ -16,6 +16,9 @@ from .hashing import hash_password, check_password
 from .creatingToken import create_tokens
 from .image_utils import *
 from django.views.decorators.csrf import csrf_exempt
+import matplotlib.pyplot as plt
+import urllib
+import base64
 
 # Shared state for tracking
 tracking_event = threading.Event()
@@ -211,3 +214,29 @@ def get_my_images(request):
 def test_csrf_view(request):
     token = get_token(request)
     return JsonResponse({'csrfToken': token})
+
+
+def pie_chart_view(request):
+    # Data for the pie chart
+    labels = ['Category A', 'Category B', 'Category C', 'Category D']
+    sizes = [15, 30, 45, 10]
+    colors = ['#ff9999','#66b3ff','#99ff99','#ffcc99']
+    explode = (0, 0, 0, 0)  # "explode" the 1st slice
+
+    # Create the pie chart
+    plt.figure(figsize=(6,6))
+    plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
+    plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+
+    # Save it to a BytesIO object
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_png = buffer.getvalue()
+    buffer.close()
+
+    # Encode the image to base64 string
+    graph = base64.b64encode(image_png)
+    graph = graph.decode('utf-8')
+
+    return render(request, 'pie_chart.html', {'graph': graph})
