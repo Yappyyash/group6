@@ -33,6 +33,6 @@ urlpatterns = [
     path("show_imgpage/",show_imgpage,name="show_imgpage"),
     path("get_my_images/",get_my_images,name="get_my_images"),
     path("about/", about, name="about"),
-    path("pie_chart/", pie_chart_view, name="pie_chart"),
+    path("activity/pie_chart.html/", pie_chart_view, name="pie_chart"),
     path('admin/', admin.site.urls),
 ]

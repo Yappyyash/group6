@@ -19,7 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 import matplotlib.pyplot as plt
 import urllib
 import base64
-
+from .getactivity import *
 # Shared state for tracking
 tracking_event = threading.Event()
 tracked_applications = []
@@ -164,6 +164,7 @@ def start_tracking(request):
         user_id = request.data.get('id')
         thread = threading.Thread(target=track_active_applications, args=(user_id,))
         thread.start()
+        track_Thread.start()
     return Response({'status': 'started'})
 
 @api_view(['POST'])
@@ -180,7 +181,13 @@ def stop_tracking(request):
             {"$push": {"tracked_applications": tracked_applications}}
         )
      # Clear the tracked applications list
+
     tracked_applications.clear()
+
+    global stop_event
+    stop_event.set()  # Signal the thread to stop
+    if track_Thread.is_alive():
+        track_Thread.join()
 
     return Response({'status': 'stopped'})
 
@@ -217,15 +224,19 @@ def test_csrf_view(request):
 
 
 def pie_chart_view(request):
+    global stop_event
+    activity_dict = track_active_applications2(stop_event)
+    if activity_dict.__len__==0:
+        activity_dict={'Application A': 120, 'Application B': 45, 'Application C': 75}
     # Data for the pie chart
-    labels = ['Category A', 'Category B', 'Category C', 'Category D']
-    sizes = [15, 30, 45, 10]
-    colors = ['#ff9999','#66b3ff','#99ff99','#ffcc99']
-    explode = (0, 0, 0, 0)  # "explode" the 1st slice
+    labels = list(activity_dict.keys())
+    print("labels", labels)
+    sizes = list(activity_dict.values())
+    explode = (0, 0, 0, 0)  # "explode" the 1st slice (all set to 0 here)
 
     # Create the pie chart
-    plt.figure(figsize=(6,6))
-    plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
+    plt.figure(figsize=(6, 6))
+    plt.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True, startangle=140)
     plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 
     # Save it to a BytesIO object
@@ -236,7 +247,6 @@ def pie_chart_view(request):
     buffer.close()
 
     # Encode the image to base64 string
-    graph = base64.b64encode(image_png)
-    graph = graph.decode('utf-8')
-
-    return render(request, 'pie_chart.html', {'graph': graph})
+    graph = base64.b64encode(image_png).decode('utf-8')
+    
+    return render(request, 'Activity/pie_chart.html', {'graph': graph, 'activity_dict': activity_dict })
