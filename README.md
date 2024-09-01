@@ -62,6 +62,20 @@ On the main page, you will find:
 -   **Python**: For writing server-side scripts and handling background processes.
 - **MongoDB**: For storing user data, activity logs, and screenshots, providing scalable data management.
 
+
+## Future Updates
+
+-   **Data Visualization**: For provide clear and insightful visualizations of user activity data.
+
+        - Track and log the time spent on different applications.
+        - Generate visual comparisons of activity data over different time periods, such as daily, monthly, and yearly trends.
+        - Facilitate better understanding and easier comparison of user activity across various timeframes.
+-   **Implementation of Machine Learning Model**: For determine whether the user is genuinely active based on tracked data.
+
+        - Apply a machine learning model to analyze user activity data.
+        - Assess and categorize user activity as genuine or idle/inactive.
+        - Improve the accuracy of activity tracking by filtering out false positives (e.g., cases where the user is not genuinely engaged).
+
 ## Python Libraries Used
 
 -   `asgiref==3.8.1`
