@@ -30,5 +30,40 @@ def track_active_applications(interval=5):
     except KeyboardInterrupt:
         return []
 
-# active_window_name
-#active_process_name
+# def track_active_applications(interval=5):
+    # try:
+    #     active_apps = {}
+    #     current_app = None
+    #     start_time = None
+
+    #     while True:
+    #         active_window_name = get_active_window_name()
+    #         active_process_name = get_active_process_name()
+
+    #         if active_window_name and active_process_name:
+    #             if active_window_name != current_app:
+    #                 # If there's a currently tracked application, update its total time
+    #                 if current_app and start_time:
+    #                     elapsed_time = time.time() - start_time
+    #                     if current_app in active_apps:
+    #                         active_apps[current_app] += elapsed_time
+    #                     else:
+    #                         active_apps[current_app] = elapsed_time
+
+    #                 # Start tracking the new active application
+    #                 current_app = active_window_name
+    #                 start_time = time.time()
+    #         print(active_apps)
+    #         time.sleep(interval)
+
+    #     return active_apps
+
+    # except KeyboardInterrupt:
+    #     # Ensure the last active application is updated before exiting
+    #     if current_app and start_time:
+    #         elapsed_time = time.time() - start_time
+    #         if current_app in active_apps:
+    #             active_apps[current_app] += elapsed_time
+    #         else:
+    #             active_apps[current_app] = elapsed_time
+    #     return active_apps
