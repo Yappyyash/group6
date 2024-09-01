@@ -222,6 +222,13 @@ def test_csrf_view(request):
     token = get_token(request)
     return JsonResponse({'csrfToken': token})
 
+def format_time(seconds):
+    if seconds >= 60:
+        minutes = seconds // 60
+        remaining_seconds = seconds % 60
+        return f"{minutes} min {remaining_seconds:.2f}"
+    else:
+        return f"{seconds:.2f}"
 
 def pie_chart_view(request):
     global stop_event
@@ -235,7 +242,7 @@ def pie_chart_view(request):
     explode = (0, 0, 0, 0)  # "explode" the 1st slice (all set to 0 here)
 
     # Create the pie chart
-    plt.figure(figsize=(6, 6))
+    plt.figure(figsize=(6,6))
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', shadow=True, startangle=140)
     plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 
@@ -248,5 +255,6 @@ def pie_chart_view(request):
 
     # Encode the image to base64 string
     graph = base64.b64encode(image_png).decode('utf-8')
-    
-    return render(request, 'Activity/pie_chart.html', {'graph': graph, 'activity_dict': activity_dict })
+    formatted_activity_dict = {app: format_time(time) for app, time in activity_dict.items()}
+
+    return render(request, 'Activity/pie_chart.html', {'graph': graph, 'activity_dict': formatted_activity_dict })

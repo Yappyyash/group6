@@ -1,10 +1,37 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Pie Chart</title>
-</head>
-<body>
-    <h2>Pie Chart</h2>
-    <img src="data:image/png;base64,{{ graph }}" alt="Pie chart">
-</body>
-</html>
+{% extends "Home/index.html" %}
+{% block start %}
+    <style>
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .chart, .activity-list {
+            flex: 1;
+            padding: 15px;
+        }
+        .chart img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+
+    <div class="container">
+        <h2 class="text-center mt-5">Application Activity</h2>
+        <div class="row chart-container">
+            <!-- Pie Chart -->
+            <div class="chart col-md-6">
+                <img src="data:image/png;base64,{{ graph }}" alt="Pie chart" class="img-fluid">
+            </div>
+            <!-- Activity List -->
+            <div class="activity-list col-md-6">
+                <ul class="list-group">
+                    {% for app, time in activity_dict.items %}
+                        <li class="list-group-item">{{ app }}: {{ time }} seconds</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
