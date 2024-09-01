@@ -32,5 +32,6 @@ urlpatterns = [
     path("get_applications/",get_applications,name="get_applications"),
     path("show_imgpage/",show_imgpage,name="show_imgpage"),
     path("get_my_images/",get_my_images,name="get_my_images"),
+    path("about/", about, name="about"),
     path('admin/', admin.site.urls),
 ]

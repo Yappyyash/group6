@@ -45,6 +45,9 @@ def Activity(request):
 def show_imgpage(request):
     return render(request, "show_images/index.html")
 
+def about(request):
+    return render(request, "About/README.html")
+
 # DRF views for authentication
 @api_view(['POST'])
 def signup(request):
