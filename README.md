@@ -53,6 +53,11 @@ On the main page, you will find:
      
 ![Page-3(1)](images/thirdd.jpeg)
 
+### Page 4: Detailed Data
+On this page, you will find out a tables and charts for facilitate better understanding and easier comparison of user activity across various timeframes.
+
+![Page-2](images/2024-09-02.png)
+
 ## Technologies Used
 
 -   **HTML**: For structuring the content of the website.
@@ -69,7 +74,6 @@ On the main page, you will find:
 
         - Track and log the time spent on different applications.
         - Generate visual comparisons of activity data over different time periods, such as daily, monthly, and yearly trends.
-        - Facilitate better understanding and easier comparison of user activity across various timeframes.
 -   **Implementation of Machine Learning Model**: For determine whether the user is genuinely active based on tracked data.
 
         - Apply a machine learning model to analyze user activity data.

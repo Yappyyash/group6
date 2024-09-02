@@ -17,7 +17,7 @@ def get_active_process_name():
     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
         return None
 
-def track_active_applications(interval=5):
+def track_active_applications(interval=15):
     try:
         arr=[]
         while True:
@@ -33,7 +33,7 @@ def track_active_applications(interval=5):
 
 stop_event=threading.Event()
 active_apps = {}
-def track_active_applications2(stop_event, interval=5):
+def track_active_applications2(stop_event, interval=15):
     try:
         global active_apps
         current_app = None
@@ -42,7 +42,6 @@ def track_active_applications2(stop_event, interval=5):
         while not stop_event.is_set():
             active_window_name = get_active_window_name()
             active_process_name = get_active_process_name()
-
             if active_window_name and active_process_name:
                 if active_window_name != current_app:
                     # If there's a currently tracked application, update its total time
@@ -71,4 +70,5 @@ def track_active_applications2(stop_event, interval=5):
                 active_apps[current_app] = elapsed_time
         return active_apps
 
-track_Thread = threading.Thread(target=track_active_applications2, args=(stop_event, 5, ))
+
+track_Thread = threading.Thread(target=track_active_applications2, args=(stop_event, 15, ))

@@ -249,6 +249,7 @@ def pie_chart_view(request):
     # Save it to a BytesIO object
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png')
+    # plt.clf()
     buffer.seek(0)
     image_png = buffer.getvalue()
     buffer.close()
