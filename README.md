@@ -25,6 +25,8 @@ To get started with the project:
 
   [![Watch the video](https://cdn.loom.com/sessions/thumbnails/51f0af01c4b042f9b7d38bbd1665ba98-6b4d8d37e9b49e93-full-play.gif)](https://www.loom.com/share/51f0af01c4b042f9b7d38bbd1665ba98)
 
+  In this vedio we have just doing some random work/task to create dummy activity for data generation ~ Clone and run our project to access full functionality.
+
 ## Features
 
 -   **User Authentication**: Secure user login and registration using JSON Web Tokens (JWT) for authentication, ensuring that user data and sessions are protected.
