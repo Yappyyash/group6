@@ -169,7 +169,7 @@ def start_tracking(request):
 
 @api_view(['POST'])
 def stop_tracking(request):
-    tracking_event.clear()  # Signal the thread to stop
+    tracking_event.clear() 
 
     # Use a timeout to avoid blocking indefinitely if something goes wrong
     if screenshot_thread and screenshot_thread.is_alive():
@@ -180,8 +180,6 @@ def stop_tracking(request):
             {"_id": ObjectId(user_id)},
             {"$push": {"tracked_applications": tracked_applications}}
         )
-     # Clear the tracked applications list
-
     tracked_applications.clear()
 
     global stop_event
@@ -239,7 +237,6 @@ def pie_chart_view(request):
     labels = list(activity_dict.keys())
     print("labels", labels)
     sizes = list(activity_dict.values())
-    explode = (0, 0, 0, 0)  # "explode" the 1st slice (all set to 0 here)
 
     # Create the pie chart
     plt.figure(figsize=(6,6))
@@ -249,7 +246,6 @@ def pie_chart_view(request):
     # Save it to a BytesIO object
     buffer = io.BytesIO()
     plt.savefig(buffer, format='png')
-    # plt.clf()
     buffer.seek(0)
     image_png = buffer.getvalue()
     buffer.close()

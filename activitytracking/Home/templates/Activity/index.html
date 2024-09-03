@@ -168,8 +168,7 @@ for (i = 0; i < close.length; i++) {
     setTimeout(function(){ div.style.display = "none"; }, 600);
   }
 }
-//  Battery
-// Function to check battery status
+
 function checkBatteryStatus() {
     navigator.getBattery().then(function(battery) {
         let startButton = document.getElementById('startButton');
@@ -179,7 +178,6 @@ function checkBatteryStatus() {
             console.log(`Battery Level: ${batteryLevel}%`);
             console.log(`Is Charging: ${battery.charging}`);
             
-            // Disable the button if the battery level is below 30% and the device is not charging
             if(batteryLevel < 20 && !battery.charging) {
                 startButton.disabled = true;
                 document.getElementById('battery-box').style.display = 'block';
@@ -187,23 +185,15 @@ function checkBatteryStatus() {
                 startButton.disabled = false;
                 document.getElementById('battery-box').style.display = 'none';
             }
-
-            // Re-check the battery status after 1 minute
             setTimeout(updateBatteryStatus, 60000);
         }
 
         updateBatteryStatus();
     });
 }
-
-// Start checking the battery status
 checkBatteryStatus();
-
-// Function to check internet connection
 function checkInternetConnection() {
     let netBox = document.getElementById('net-box');
-
-    // Try to fetch a small, fast resource from the internet
     fetch('https://www.google.com/', { method: 'HEAD', mode: 'no-cors' })
         .then(() => {
             console.log("You are online.");
@@ -214,13 +204,10 @@ function checkInternetConnection() {
             netBox.style.display = 'block';
         });
 
-    setTimeout(checkInternetConnection, 60000); // Re-check after 1 minute
+    setTimeout(checkInternetConnection, 60000); 
 }
 
-// Start checking the internet connection status
 checkInternetConnection();
-
-// Listen for changes in the internet connection status
 window.addEventListener('online', checkInternetConnection);
 window.addEventListener('offline', checkInternetConnection);
 

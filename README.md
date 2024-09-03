@@ -20,7 +20,11 @@ To get started with the project:
         `python manage.py runserver` 
     
 5.  **Access the home route** at: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
-    
+
+## Working Vedio of Application
+
+  [![Watch the video](https://cdn.loom.com/sessions/thumbnails/51f0af01c4b042f9b7d38bbd1665ba98-6b4d8d37e9b49e93-full-play.gif)](https://www.loom.com/share/51f0af01c4b042f9b7d38bbd1665ba98)
+
 ## Features
 
 -   **User Authentication**: Secure user login and registration using JSON Web Tokens (JWT) for authentication, ensuring that user data and sessions are protected.
