@@ -1,98 +1,221 @@
-<h1 id="activity-tracking-app">Activity Tracking App</h1>
-<p><strong>Activity Tracking App</strong> is a sophisticated platform
-designed to monitor the applications you use and capture screenshots of
-your screen while operating seamlessly in the background.</p>
-<h2 id="setup-instructions">Setup Instructions</h2>
-<p>To get started with the project:</p>
-<ol type="1">
-<li><p><strong>Download all dependencies</strong> by running:</p>
-<pre><code>`pip install -r requirements.txt` </code></pre></li>
-<li><p><strong>Navigate to the project directory</strong>:</p>
-<pre><code>`cd activitytracking/` </code></pre></li>
-<li><p><strong>Start the server</strong>:</p>
-<pre><code>`python manage.py runserver` </code></pre></li>
-<li><p><strong>Access the home route</strong> at: <a
-href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a></p></li>
-</ol>
-<h2 id="features">Features</h2>
-<ul>
-<li><strong>User Authentication</strong>: Secure user login and
-registration using JSON Web Tokens (JWT) for authentication, ensuring
-that user data and sessions are protected.</li>
-<li><strong>Activity Tracking</strong>: Monitors which applications are
-opened and records activity data.</li>
-<li><strong>Screenshot Capture</strong>: Takes periodic screenshots of
-the user’s screen to track activity visually.</li>
-<li><strong>Data Retrieval</strong>: Provides options to retrieve
-collected activity data through a dedicated “Get Data” button.</li>
-<li><strong>Session Management</strong>: Includes functionality to start
-and stop tracking sessions as needed.</li>
-<li><strong>MongoDB Integration</strong>: Utilizes MongoDB for storing
-user data, activity logs, and screenshots, offering scalable and
-flexible data management.</li>
-</ul>
-<h2 id="pages-overview">Pages Overview</h2>
-<h3 id="page-1-intro">Page 1: Intro</h3>
-<p>This is the introductory page of our website. It features a small
-motto that encapsulates the essence of our service. <img
-src="../../../../images/first.jpeg" alt="Page-1" /></p>
-<h3 id="page-2-authentication">Page 2: Authentication</h3>
-<p>From the introduction page, you will be redirected to the
-authentication page. You need to log in to access the main functionality
-of the website. <img src="../../../../images/third.jpeg" alt="Page-2" /></p>
-<h3 id="page-3-main-page">Page 3: Main Page</h3>
-<figure>
-<img src="../../../../images/third.jpeg" alt="Page-3" />
-<figcaption aria-hidden="true">Page-3</figcaption>
-</figure>
-<p>On the main page, you will find:</p>
-<ul>
-<li>A <strong>Start</strong> button to begin tracking activity and
-taking screenshots.</li>
-<li>A <strong>Get Data</strong> button to retrieve the collected
-activity data.</li>
-<li>A <strong>Stop</strong> button to halt the tracking session.</li>
-</ul>
-<figure>
-<img src="../../../../images/thirdd.jpeg" alt="Page-3(1)" />
-<figcaption aria-hidden="true">Page-3(1)</figcaption>
-</figure>
-<h2 id="technologies-used">Technologies Used</h2>
-<ul>
-<li><strong>HTML</strong>: For structuring the content of the
-website.</li>
-<li><strong>CSS</strong>: For styling the website and enhancing its
-appearance.</li>
-<li><strong>JavaScript</strong>: For adding interactivity to the web
-pages.</li>
-<li><strong>Django</strong>: For the backend framework to handle
-server-side logic.</li>
-<li><strong>Python</strong>: For writing server-side scripts and
-handling background processes.</li>
-<li><strong>MongoDB</strong>: For storing user data, activity logs, and
-screenshots, providing scalable data management.</li>
-</ul>
-<h2 id="python-libraries-used">Python Libraries Used</h2>
-<ul>
-<li><code>asgiref==3.8.1</code></li>
-<li><code>bcrypt==4.2.0</code></li>
-<li><code>Django==5.1</code></li>
-<li><code>djangorestframework==3.15.2</code></li>
-<li><code>djangorestframework-simplejwt==5.3.1</code></li>
-<li><code>dnspython==2.6.1</code></li>
-<li><code>numpy==1.26.4</code></li>
-<li><code>psutil==6.0.0</code></li>
-<li><code>pyarrow==17.0.0</code></li>
-<li><code>PyGetWindow==0.0.9</code></li>
-<li><code>PyJWT==2.9.0</code></li>
-<li><code>pylance==0.16.1</code></li>
-<li><code>pymongo==4.8.0</code></li>
-<li><code>PyRect==0.2.0</code></li>
-<li><code>python-xlib==0.33</code></li>
-<li><code>six==1.16.0</code></li>
-<li><code>sqlparse==0.5.1</code></li>
-<li><code>typing_extensions==4.12.2</code></li>
-<li><code>xlib==0.21</code></li>
-<li><code>pywin32</code></li>
-<li><code>pillow</code></li>
-</ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Tracking App</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #E1D7B7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h1, h2, h3 {
+            color: #1E2A5E;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-size: 28px;
+            border-bottom: 2px solid #7C93C3;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 24px;
+            margin-top: 30px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #55679C;
+            margin-bottom: 20px;
+        }
+
+        a {
+            color: #7C93C3;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        ul, ol {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-left: 4px solid #7C93C3;
+            overflow-x: auto;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            color: #c7254e;
+            background-color: #f9f2f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        img {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        figcaption {
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+        }
+
+        button {
+            background-color: #7C93C3;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+            display: inline-block;
+        }
+
+        button:hover {
+            background-color: #55679C;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            h3 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="activity-tracking-app">Activity Tracking App</h1>
+        <p><strong>Activity Tracking App</strong> is a sophisticated platform designed to monitor the applications you use and capture screenshots of your screen while operating seamlessly in the background.</p>
+        
+        <h2 id="setup-instructions">Setup Instructions</h2>
+        <p>To get started with the project:</p>
+        <ol type="1">
+            <li><p><strong>Download all dependencies</strong> by running:</p>
+            <pre><code>pip install -r requirements.txt</code></pre></li>
+            <li><p><strong>Navigate to the project directory</strong>:</p>
+            <pre><code>cd activitytracking/</code></pre></li>
+            <li><p><strong>Start the server</strong>:</p>
+            <pre><code>python manage.py runserver</code></pre></li>
+            <li><p><strong>Access the home route</strong> at: <a href="http://127.0.0.1:8000/">http://127.0.0.1:8000/</a></p></li>
+        </ol>
+
+        <h2 id="features">Features</h2>
+        <ul>
+            <li><strong>User Authentication</strong>: Secure user login and registration using JSON Web Tokens (JWT) for authentication, ensuring that user data and sessions are protected.</li>
+            <li><strong>Activity Tracking</strong>: Monitors which applications are opened and records activity data.</li>
+            <li><strong>Screenshot Capture</strong>: Takes periodic screenshots of the user’s screen to track activity visually.</li>
+            <li><strong>Data Retrieval</strong>: Provides options to retrieve collected activity data through a dedicated “Get Data” button.</li>
+            <li><strong>Session Management</strong>: Includes functionality to start and stop tracking sessions as needed.</li>
+            <li><strong>MongoDB Integration</strong>: Utilizes MongoDB for storing user data, activity logs, and screenshots, offering scalable and flexible data management.</li>
+        </ul>
+
+        <h2 id="pages-overview">Pages Overview</h2>
+        <h3 id="page-1-intro">Page 1: Intro</h3>
+        <p>This is the introductory page of our website. It features a small motto that encapsulates the essence of our service.</p>
+        <figure>
+            <img src="../../../../images/first.jpeg" alt="Page-1">
+            <figcaption>Page-1</figcaption>
+        </figure>
+
+        <h3 id="page-2-authentication">Page 2: Authentication</h3>
+        <p>From the introduction page, you will be redirected to the authentication page. You need to log in to access the main functionality of the website.</p>
+        <figure>
+            <img src="../../../../images/third.jpeg" alt="Page-2">
+            <figcaption>Page-2</figcaption>
+        </figure>
+
+        <h3 id="page-3-main-page">Page 3: Main Page</h3>
+        <p>On the main page, you will find:</p>
+        <ul>
+            <li>A <strong>Start</strong> button to begin tracking activity and taking screenshots.</li>
+            <li>A <strong>Get Data</strong> button to retrieve the collected activity data.</li>
+            <li>A <strong>Stop</strong> button to halt the tracking session.</li>
+        </ul>
+        <figure>
+            <img src="../../../../images/thirdd.jpeg" alt="Page-3">
+            <figcaption>Page-3</figcaption>
+        </figure>
+
+        <h2 id="technologies-used">Technologies Used</h2>
+        <ul>
+            <li><strong>HTML</strong>: For structuring the content of the website.</li>
+            <li><strong>CSS</strong>: For styling the website and enhancing its appearance.</li>
+            <li><strong>JavaScript</strong>: For adding interactivity to the web pages.</li>
+            <li><strong>Django</strong>: For the backend framework to handle server-side logic.</li>
+            <li><strong>Python</strong>: For writing server-side scripts and handling background processes.</li>
+            <li><strong>MongoDB</strong>: For storing user data, activity logs, and screenshots, providing scalable data management.</li>
+        </ul>
+
+        <h2 id="python-libraries-used">Python Libraries Used</h2>
+        <ul>
+            <li><code>asgiref==3.8.1</code></li>
+            <li><code>bcrypt==4.2.0</code></li>
+            <li><code>Django==5.1</code></li>
+            <li><code>djangorestframework==3.15.2</code></li>
+            <li><code>djangorestframework-simplejwt==5.3.1</code></li>
+            <li><code>dnspython==2.6.1</code></li>
+            <li><code>numpy==1.26.4</code></li>
+            <li><code>psutil==6.0.0</code></li>
+            <li><code>pyarrow==17.0.0</code></li>
+            <li><code>PyGetWindow==0.0.9</code></li>
+            <li><code>PyJWT==2.9.0</code></li>
+            <li><code>pylance==0.16.1</code></li>
+            <li><code>pym
