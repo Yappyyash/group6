@@ -31,7 +31,7 @@
             <div class="activity-list col-md-6">
                 <ul class="list-group">
                     {% for app, time in activity_dict.items %}
-                        <li class="list-group-item">{{ app }}: {{ time }} seconds</li>
+                        <li class="list-group-item">{{ app }}: <span style="font-weight: 800;">{{ time }} seconds</span></li>
                     {% endfor %}
                 </ul>
             </div>

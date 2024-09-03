@@ -29,7 +29,9 @@ To get started with the project:
 -   **Data Retrieval**: Provides options to retrieve collected activity data through a dedicated "Get Data" button.
 -   **Session Management**: Includes functionality to start and stop tracking sessions as needed.
 -   **MongoDB Integration**: Utilizes MongoDB for storing user data, activity logs, and screenshots, offering scalable and flexible data management.
-
+-   **Battery Status Check**: If the battery level is below a specified threshold and the device is not charging, then the applicatoin does not start to save power. 
+-   **Data Storage Handling Based on Connectivity**: To store data locally if there is no internet connection and synchronize it with cloud storage when connectivity is restored.
+-   **and several more to come for a superior user experience**
 ## Pages Overview
 
 ### Page 1: Intro

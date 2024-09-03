@@ -1,6 +1,8 @@
 {% extends "Home/index.html" %}
 {% block start %}
+
 <div class="container">
+
   <div class="mt-5">
     <h1>Start Tracking Your Journey</h1>
     <p class="text-muted">
@@ -9,11 +11,13 @@
       more personalized and secure experience for you. Your data is always
       handled with the highest standards of privacy and security.
     </p>
-    <button class="btn btn-primary" id="startButton">Start</button>
-    <a href="pie_chart.html" class="btn btn-info" >More Detail</a>
-    <button class="btn btn-danger" id="stopButton" style="display: none;">Stop</button>
-    <button class="btn btn-success" id="refreshButton">Get Data</button>
-  </div>
+    <div>
+      <button class="btn btn-primary" id="startButton">Start</button>
+      <a href="pie_chart.html" class="btn btn-info" >More Detail</a>
+      <button class="btn btn-danger" id="stopButton" style="display: none;">Stop</button>
+      <button class="btn btn-success" id="refreshButton">Get Data</button>
+    </div>
+      
   <div class="mt-5">
     <div id="applications">
       <h2 id="activityHeader" style="display: none;">User Activity</h2>
@@ -22,6 +26,21 @@
     <div id="trackingMessage" style="display: none;" class="tracking-message">
       <p>Tracking your activity...</p>
       <div class="spinner"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container" >
+  <div class="row">
+    <div class="alert warning net" id="net-box">
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+      <strong>Warning!</strong> Check your internet connection.
+    </div>
+  </div>
+  <div class="row">
+    <div class="alert warning battery" id="battery-box">
+      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+      <strong>Battery Low! </strong>Plugin your device to start activity monitering.
     </div>
   </div>
 </div>
@@ -51,6 +70,34 @@
       transform: rotate(360deg);
     }
   }
+  .alert.warning {background-color: #ff9800;}
+  .alert {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f44336;
+  color: white;
+  float:right;
+  width:50%;
+  opacity: 1;
+  transition: opacity 0.6s;
+  /* display: none; */
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+
 </style>
 <script>
   const user_id = localStorage.getItem('user_id');
@@ -110,5 +157,74 @@
       })
       .catch(error => console.error('Error:', error));
   });
+  // Messages
+var close = document.getElementsByClassName("closebtn");
+var i;
+
+for (i = 0; i < close.length; i++) {
+  close[i].onclick = function(){
+    var div = this.parentElement;
+    div.style.opacity = "0";
+    setTimeout(function(){ div.style.display = "none"; }, 600);
+  }
+}
+//  Battery
+// Function to check battery status
+function checkBatteryStatus() {
+    navigator.getBattery().then(function(battery) {
+        let startButton = document.getElementById('startButton');
+
+        function updateBatteryStatus() {
+            let batteryLevel = (battery.level * 100).toFixed(0);
+            console.log(`Battery Level: ${batteryLevel}%`);
+            console.log(`Is Charging: ${battery.charging}`);
+            
+            // Disable the button if the battery level is below 30% and the device is not charging
+            if(batteryLevel < 20 && !battery.charging) {
+                startButton.disabled = true;
+                document.getElementById('battery-box').style.display = 'block';
+            } else {
+                startButton.disabled = false;
+                document.getElementById('battery-box').style.display = 'none';
+            }
+
+            // Re-check the battery status after 1 minute
+            setTimeout(updateBatteryStatus, 60000);
+        }
+
+        updateBatteryStatus();
+    });
+}
+
+// Start checking the battery status
+checkBatteryStatus();
+
+// Function to check internet connection
+function checkInternetConnection() {
+    let netBox = document.getElementById('net-box');
+
+    // Try to fetch a small, fast resource from the internet
+    fetch('https://www.google.com/', { method: 'HEAD', mode: 'no-cors' })
+        .then(() => {
+            console.log("You are online.");
+            netBox.style.display = 'none';
+        })
+        .catch(() => {
+            console.log("You are offline. Please check your internet connection.");
+            netBox.style.display = 'block';
+        });
+
+    setTimeout(checkInternetConnection, 60000); // Re-check after 1 minute
+}
+
+// Start checking the internet connection status
+checkInternetConnection();
+
+// Listen for changes in the internet connection status
+window.addEventListener('online', checkInternetConnection);
+window.addEventListener('offline', checkInternetConnection);
+
+
+
 </script>
 {% endblock %}
